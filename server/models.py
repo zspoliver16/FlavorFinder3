@@ -25,3 +25,18 @@ class User(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f'<User id={self.id} username={self.username} >'
+
+
+class Flavor(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    description = db.Column(db.Text)
+    image_url = db.Column(db.String)
+
+    def to_dict(self):  # Serialization method
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "image_url": self.image_url
+        }

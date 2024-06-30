@@ -6,6 +6,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 auth = Blueprint('auth', __name__)
 
 @auth.route('/signup', methods=['POST'])
+@cross_origin(origins=["http://localhost:3000"], supports_credentials=True)
 def signup():
     data = request.get_json()
     username = data.get('username')

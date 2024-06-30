@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import authService from './authService';
 import { useNavigate } from 'react-router-dom';
+import './LoginForm.css'
 
 function LoginForm() {
     const [formData, setFormData] = useState({
@@ -22,38 +23,34 @@ function LoginForm() {
       setIsLoading(true);
   
       try {
-        const response = await authService.login(formData);
-        console.log('Login response:', response); // Log the entire response
-  
-        // Store token ONLY if the response contains it
-        if (response.token) { 
-          localStorage.setItem('token', response.token);
+          const response = await authService.login(formData);
+          console.log('Login response:', response); 
+          if(response.user) {
+              localStorage.setItem('user', JSON.stringify(response.user));
+          }
+          
+          // Redirect to home page after successful login
           setTimeout(() => {
-            setIsLoading(false);
-            navigate('/');
+              setIsLoading(false);
+              navigate('/home'); // Now navigate after the delay
           }, 500); 
-        } else {
-          // Handle case where the backend doesn't return a token
-          setError('Login failed. Please check your credentials.');
-          setIsLoading(false);
-        }
   
       } catch (error) {
-        setIsLoading(false);
-        console.error('Login error:', error);
+          setIsLoading(false);
+          console.error('Login error:', error);
   
-        if (error.response && error.response.data) {
-          setError(error.response.data.error || 'Login failed. Please try again.'); 
-        } else {
-          setError('An unknown error occurred. Please try again later.');
-        }
+          if (error.response && error.response.data) {
+              setError(error.response.data.error || 'Login failed. Please try again.'); 
+          } else {
+              setError('An unknown error occurred. Please try again later.');
+          }
       }
-    };
+  };
 
     return (
         <form onSubmit={handleSubmit}>
         <h2>Login</h2>
-        <div>
+        <div className="username">
           <label htmlFor="username">Username:</label>
           <input
             type="text"
@@ -64,7 +61,7 @@ function LoginForm() {
             required
           />
         </div>
-        <div>
+        <div className="password">
           <label htmlFor="password">Password:</label>
           <input
             type="password"

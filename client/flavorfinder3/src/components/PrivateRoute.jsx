@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Outlet, Navigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { Outlet, Navigate } from "react-router-dom";
 import authService from './authService';
 
 const PrivateRoute = () => {
     const [isLoading, setIsLoading] = useState(true);
-    const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token")); 
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
         const checkToken = async () => {
@@ -20,13 +20,13 @@ const PrivateRoute = () => {
         };
         
         checkToken();
-    }, []); // Empty dependency array ensures this runs only once on mount
+    }, []); 
 
     if (isLoading) {
         return <div>Loading...</div>;
     }
 
-    return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+    return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />; 
 };
 
 export default PrivateRoute;

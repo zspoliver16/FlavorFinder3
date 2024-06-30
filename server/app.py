@@ -72,9 +72,22 @@ class Login(Resource):
 
 api.add_resource(Login, '/login')
 
+@app.route('/check_session', methods=['GET', 'OPTIONS'])
+def check_session():
+    user_id = session.get('user_id')
+    if user_id:
+        user = User.query.get(user_id)
+        if user:
+            return jsonify(user.to_dict()), 200
+    return jsonify({"error": "Unauthorized: Must login"}), 401
+
 @app.before_request
 def check_authorized():
-    if (request.endpoint == 'checksession' or request.endpoint == 'projectbyid' or \
-            (request.endpoint == 'projects' and request.method == 'POST'))\
-             and not session.get('user_id'):
-        return make_response({'error': 'Unauthorized: Must login'}, 401)
+    endpoints = ['check_session', 'projectbyid', 'projects']
+    if request.endpoint in endpoints and request.method in ['GET', 'POST', 'DELETE'] and not session.get('user_id'):
+        return jsonify({'error': 'Unauthorized: Must login'}), 401  
+
+# @app.route('/flavors', methods=['GET'])
+# def get_flavors():
+#     flavors = Flavor.query.all()
+#     return jsonify([flavor.to_dict() for flavor in flavors])

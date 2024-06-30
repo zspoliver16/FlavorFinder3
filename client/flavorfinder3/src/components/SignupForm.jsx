@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import authService from './authService';
 import { useNavigate } from 'react-router-dom';
+import './SignupForm.css'
 
 function SignupForm() {
     const [formData, setFromData] = useState({
@@ -14,6 +15,7 @@ function SignupForm() {
 
     const handleChange = (e) => {
         setFromData({ ...formData, [e.target.name]: e.target.value});
+        setError(null);
     };
 
     const handleSubmit = async (e) => {
@@ -22,7 +24,6 @@ function SignupForm() {
         try {
             const response = await authService.signup(formData);
             console.log(response.data.msg);
-            localStorage.setItem('token', response.data.access_token);
             navigate('/login');
           } catch (err) {
             setError(err.response?.data?.msg || 'An error occurred during signup.');
@@ -31,15 +32,15 @@ function SignupForm() {
 
     return (
         <form onSubmit={handleSubmit}>
-          <div>
+          <div className="username">
             <label htmlFor="username">Username:</label>
             <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} />
           </div>
-          <div>
+          <div className="email">
             <label htmlFor="email">Email:</label>
             <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} />
           </div>
-          <div>
+          <div className="password">
             <label htmlFor="password">Password:</label>
             <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} />
           </div>
