@@ -13,6 +13,9 @@ metadata = MetaData(naming_convention={
 
 app = Flask(__name__)
 
+THE_MEAL_DB_API_KEY = '1'
+THE_MEAL_DB_BASE_URL = 'https://www.themealdb.com/api/json/v1/'
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

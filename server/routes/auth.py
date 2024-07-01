@@ -55,3 +55,19 @@ def check_token():
     except Exception as e:
         print(f"Error checking token: {e}")
         return jsonify(msg="Error checking token"), 500
+
+@app.route('/api/recipes', methods=['GET'])
+def proxy_recipes():
+    query = request.args.get('query', '')
+    url = f"{THE_MEAL_DB_BASE_URL}{THE_MEAL_DB_API_KEY}/search.php?s={query}"
+
+    try:
+        response = requests.get(url)
+        excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+        headers = [(name, value) for (name, value) in response.raw.headers.items()
+                   if name.lower() not in excluded_headers]
+
+        return Response(response.content, response.status_code, headers)
+    except requests.RequestException as e:
+        print(f"Error proxying request to TheMealDB: {e}")
+        return jsonify({"error": "Failed to fetch recipes"}), 500

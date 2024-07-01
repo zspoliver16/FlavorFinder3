@@ -9,6 +9,7 @@ from flask_cors import CORS
 CORS(app, origins=["http://localhost:3000"], supports_credentials=True) 
 api = Api(app)
 
+
 @app.after_request
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')

@@ -12,7 +12,7 @@
     text-align: center;
 }
 
-h1 {
+.landing-title {
     text-shadow: 5px 5px 10px green;
     font-family: Arial, sans-serif;
     font-size: 50px;

@@ -1,0 +1,71 @@
+.recipes-title {  /* Target the h1 with the class "recipes-title" */
+    text-align: center;  /* Center the title */
+    font-size: 5rem;    /* Adjust the font size as desired */
+    font-weight: bold;    /* Make the title bold */
+    margin-bottom: 20px;  /* Add some space below the title */
+    color: white;
+    background-color: green;
+    backdrop-filter: blur(20px);
+    border-radius: 15px;
+    /* Add other styles as needed (e.g., color, font-family) */
+  }
+
+div.card {
+    height: 300px;
+    width: 300px;
+}
+
+img.card-img-top {
+    height: 200px;
+    width: 200px;
+    border-radius: 15px;
+}
+
+div.card {
+    text-align: center;
+}
+
+div.card-tile.h5 {
+    text-shadow: 5px 5px 10px #007bff;
+}
+.container {
+    padding: 0; /* Remove padding to use full width */
+    min-height: 100vh; /* Full viewport height */
+    background-image: url('https://www.closetandstorageconcepts.com/boston-massachusetts/wp-content/uploads/sites/8/2020/03/pantry-shelving-modern-csc-lg1600-min.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Ensures background covers the full page and stays fixed during scroll */
+    width: 100%; /* Full viewport width */
+    margin: 0; /* Remove default margin */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    justify-content: center; /* Center content vertically */
+}
+
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 20px 20px 40px rgba(100, 150, 250, 0.5),
+                -2px -2px 9px rgba(100, 150, 250, 0.6),
+                inset -8px -8px 20px green,
+                inset 5px 5px 10px green;
+}
+
+.recipes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Adjust gap between cards */
+}
+
+.recipe-card {
+    flex: 1 0 250px; /* Minimum width for each card */
+    /* ... your existing card styles (border, shadow, etc.) ... */
+}
+
