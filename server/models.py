@@ -1,7 +1,8 @@
 from config import db, bcrypt
 from sqlalchemy_serializer import SerializerMixin
+from flask_login import UserMixin
 
-class User(db.Model, SerializerMixin):
+class User(db.Model, SerializerMixin, UserMixin):
     __tablename__ = 'users'
 
     serialize_rules = ('-created_at', '-updated_at', '-_password_hash',)
@@ -11,6 +12,19 @@ class User(db.Model, SerializerMixin):
     _password_hash = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+
+    def get_id(self):
+        return str(self.id)
+
+    def is_authenticated(self):
+        return True  # Assuming all users are authenticated
+
+    def is_active(self):
+        return True  # Assuming all users are active
+
+    def is_anonymous(self):
+        return False  # Assuming this is not an anonymous user
+
 
     @property
     def password_hash(self):
@@ -40,3 +54,12 @@ class Flavor(db.Model):
             "description": self.description,
             "image_url": self.image_url
         }
+
+class Favorite(db.Model):
+    __tablename__ = 'favorites'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    recipe_id = db.Column(db.String, nullable=False)  # Using TheMealDB recipe ID
+
+    user = db.relationship('User', backref=db.backref('favorites', lazy=True))

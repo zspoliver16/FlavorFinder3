@@ -28,7 +28,6 @@ const authService = {
     } catch (error) {
       if (error.response && error.response.status === 401) {
         localStorage.removeItem('token');
-        // Check if `window` and `location` exist before assigning
         if (typeof window !== 'undefined' && window.location) {
             window.location.href = "/login";
         }
@@ -36,6 +35,16 @@ const authService = {
       throw error; 
     } 
   }, 
+
+  logout: async () => {
+    try {
+        await axios.delete(`${BASE_URL}/logout`, { withCredentials: true }); // Send DELETE request to logout
+        localStorage.removeItem('token'); 
+    } catch (error) {
+        console.error("Error logging out:", error);
+        throw error; // Re-throw for handling in the component
+    }
+} 
 };
 
 export default authService;

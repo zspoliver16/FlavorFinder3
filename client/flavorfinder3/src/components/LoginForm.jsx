@@ -1,83 +1,45 @@
 import React, { useState } from 'react';
-import authService from './authService';
 import { useNavigate } from 'react-router-dom';
-import './LoginForm.css'
+import axios from 'axios';
+import './LoginForm.css';
 
-function LoginForm() {
-    const [formData, setFormData] = useState({
-        username: '',
-        password: '',
-    });
-
-    const [error, setError] = useState(null);
-    const [isLoading, setIsLoading] = useState(false)
+function Login() {
+    const [username, setUsername] = useState('');  // Use username instead of email
+    const [password, setPassword] = useState('');
+    const [message, setMessage] = useState('');
     const navigate = useNavigate();
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = async (e) => {
+  
+    const handleLogin = async (e) => {
       e.preventDefault();
-      setError(null);
-      setIsLoading(true);
-  
       try {
-          const response = await authService.login(formData);
-          console.log('Login response:', response); 
-          if(response.user) {
-              localStorage.setItem('user', JSON.stringify(response.user));
-          }
-          
-          // Redirect to home page after successful login
+        const response = await axios.post('http://127.0.0.1:5555/login', { username, password }); // Updated data
+        if (response.status === 200) {
+          setMessage('Login successful');
+          localStorage.setItem('token', response.data.token);
           setTimeout(() => {
-              setIsLoading(false);
-              navigate('/home'); // Now navigate after the delay
-          }, 500); 
-  
+            navigate('/home');
+          }, 2000); 
+        } else {
+          setMessage('Login failed');
+        }
       } catch (error) {
-          setIsLoading(false);
-          console.error('Login error:', error);
-  
-          if (error.response && error.response.data) {
-              setError(error.response.data.error || 'Login failed. Please try again.'); 
-          } else {
-              setError('An unknown error occurred. Please try again later.');
-          }
+        setMessage(`Login failed: ${error.response?.data?.error || error.message}`); // Updated error message
       }
-  };
-
+    };
+  
     return (
-        <form onSubmit={handleSubmit}>
-        <h2>Login</h2>
-        <div className="username">
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
+      <div className='loginPage'>
+        <div className='initLoginContainer'>
+          <h2>Login</h2>
+          <form className='loginForm' onSubmit={handleLogin}>
+            <input type="text" onChange={(e) => setUsername(e.target.value)} className="form-control-login" placeholder="Username" required /> 
+            <input type="password" onChange={(e) => setPassword(e.target.value)} className="form-control-login" placeholder="Password" required />
+            <button type="submit" className="btn btn-primary mt-2">Login</button>
+            <p>{message}</p>
+          </form>
         </div>
-        <div className="password">
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        {error && <div className="error">{error}</div>} {/* Display error message */}
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
+      </div>
     );
-}
-
-export default LoginForm;
+  }
+  
+  export default Login;

@@ -3,10 +3,15 @@
     font-size: 5rem;    /* Adjust the font size as desired */
     font-weight: bold;    /* Make the title bold */
     margin-bottom: 20px;  /* Add some space below the title */
-    color: white;
-    background-color: green;
-    backdrop-filter: blur(20px);
+    color: green;
+    background: green;
     border-radius: 15px;
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    box-shadow: 6px 6px 15px green,
+                -3px -3px 10px green,
+                inset -8px -8px 20px green,
+                inset 5px 5px 10px green;
     /* Add other styles as needed (e.g., color, font-family) */
   }
 
@@ -56,6 +61,7 @@ div.card-tile.h5 {
                 -2px -2px 9px rgba(100, 150, 250, 0.6),
                 inset -8px -8px 20px green,
                 inset 5px 5px 10px green;
+    
 }
 
 .recipes-grid {
@@ -66,6 +72,26 @@ div.card-tile.h5 {
 
 .recipe-card {
     flex: 1 0 250px; /* Minimum width for each card */
-    /* ... your existing card styles (border, shadow, etc.) ... */
+    color: green;
+    font-weight: bold;
+    background-color: transparent;
+    backdrop-filter: blur(2px);
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    box-shadow: 6px 6px 15px green,
+                -3px -3px 10px green,
+                inset -8px -8px 20px green,
+                inset 5px 5px 10px green;
+    transition: transform 0.3s ease-out, box-shadow 0.6s ease-out;
+    margin-bottom: 20px; /* Reduce margin */
+    margin-left: 10px; /* Space between cards */
+    margin-right: 10px; /* Space between cards */
+    width: 400px; /* Adjust width to make cards bigger */
+    margin-top: 20px;
+    border-radius: 50px;
+}
+
+.recipes-page {
+    padding-top: 22500px;
 }
 

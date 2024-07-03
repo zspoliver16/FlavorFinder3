@@ -1,9 +1,11 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Response
 from ..models import User
-from ..app import db
+from ..app import db, Favorite
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, decode_token
+import requests
 
 auth = Blueprint('auth', __name__)
+recipes = Blueprint('recipes', __name__)
 
 @auth.route('/signup', methods=['POST'])
 @cross_origin(origins=["http://localhost:3000"], supports_credentials=True)
@@ -39,7 +41,7 @@ def login():
     if not user or not user.check_password(password):
         return jsonify(msg="Incorrect username or password"), 401
     
-    access_token = create_access_token(identify=user.id)
+    access_token = create_access_token(identity=user.id)
     return jsonify(msg="Login Successful", access_token=access_token), 200
 
 @auth.route('/check', method=['POST'])
@@ -71,3 +73,21 @@ def proxy_recipes():
     except requests.RequestException as e:
         print(f"Error proxying request to TheMealDB: {e}")
         return jsonify({"error": "Failed to fetch recipes"}), 500
+    
+@recipes.route('/favorites', methods=['POST'])
+@cross_origin(origins=["http://localhost:3000"], supports_credentials=True)
+def add_favorite():
+    data = request.get_json()
+    recipe_id = data.get('recipe_id')
+
+    if not recipe_id:
+        return jsonify({"error": "Recipe ID is required"}), 400
+
+    try:
+        favorite = Favorite(recipe_id=recipe_id)
+        db.session.add(favorite)
+        db.session.commit()
+
+        return jsonify({"message": "Recipe added to favorites", 'favorite_id': favorite.id}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

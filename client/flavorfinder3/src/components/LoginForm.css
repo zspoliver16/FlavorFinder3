@@ -1,24 +1,50 @@
-form {
-    text-align: center;
-}
-
-h2 {
-    text-shadow: 5px 5px 10px green;
-    font-family: Arial, sans-serif;
-    font-size: 50px;
-}
-
-.username {
-    text-shadow: 5px 5px 10px green;
-    font-size: 30px;
-}
-
-.password {
-    text-shadow: 5px 5px 10px green;
-    font-size: 30px;
-}
-
-button {
-    text-shadow: 5px 5px 10px green;
-    font-size: 30px;
+html, body {
+    margin: 0; 
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; 
+    overflow-y: auto;
+  }
+  
+  body {
+    padding: 0; 
+    min-height: 100vh; 
+    background-size: cover;
+    background-position: center;
+    width: 100%; 
+    margin: 0; 
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    /* Add or adjust a background color to your preference */
+    background-color: #f0fff0; /* Honeydew (light green) */
+  }
+  
+  .initLoginContainer {
+    font-family: 'Ariel';
+    width: 65%;
+    min-height: 250px;
+    margin: 20px auto;
+    padding: 20px;
+    /* Adjust border and background colors for a green theme */
+    border: 2px solid #90EE90; /* Light Green */
+    background-color: #f0fff0; /* Honeydew (light green) */
+    border-radius: 10px;
+    /* Update box shadow with green shades */
+    box-shadow: 6px 6px 15px #90EE90, -3px -3px 10px #90EE90,
+                inset -8px -8px 20px #90EE90,  /* Light Green */
+                inset 5px 5px 10px #90EE90;   /* Light Green */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+input[type="text"], input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #161010;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 25px;
 }

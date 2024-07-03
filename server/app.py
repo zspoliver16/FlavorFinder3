@@ -1,13 +1,22 @@
 from flask import request, make_response, session, jsonify
-from config import app, db, bcrypt
-from models import User
+from config import app, db, bcrypt, THE_MEAL_DB_API_KEY, THE_MEAL_DB_BASE_URL
+from models import User, Flavor, Favorite
 from flask_restful import Resource, Api
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
+from flask_login import LoginManager, login_required, current_user
+
 
 
 
 CORS(app, origins=["http://localhost:3000"], supports_credentials=True) 
 api = Api(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 @app.after_request
@@ -74,12 +83,10 @@ class Login(Resource):
 api.add_resource(Login, '/login')
 
 @app.route('/check_session', methods=['GET', 'OPTIONS'])
+@cross_origin(origins=["http://localhost:3000"], supports_credentials=True)
 def check_session():
-    user_id = session.get('user_id')
-    if user_id:
-        user = User.query.get(user_id)
-        if user:
-            return jsonify(user.to_dict()), 200
+    if current_user.is_authenticated:
+        return jsonify(current_user.to_dict()), 200
     return jsonify({"error": "Unauthorized: Must login"}), 401
 
 @app.before_request
@@ -88,7 +95,80 @@ def check_authorized():
     if request.endpoint in endpoints and request.method in ['GET', 'POST', 'DELETE'] and not session.get('user_id'):
         return jsonify({'error': 'Unauthorized: Must login'}), 401  
 
-# @app.route('/flavors', methods=['GET'])
-# def get_flavors():
-#     flavors = Flavor.query.all()
-#     return jsonify([flavor.to_dict() for flavor in flavors])
+@app.route('/flavors', methods=['GET'])
+def get_flavors():
+    flavors = Flavor.query.all()
+    return jsonify([flavor.to_dict() for flavor in flavors])
+
+@app.route('/flavors/<int:id>', methods=['GET'])
+def get_flavor(id):
+    flavor = Flavor.query.get(id)
+    if flavor:
+        return jsonify(flavor.to_dict()), 200
+    else:
+        return jsonify({"error": "Flavor not found"}), 404
+
+@app.route('/flavors/<int:id>', methods=['PUT'])
+def update_flavor(id):
+    flavor = Flavor.query.get(id)
+    if flavor:
+        data = request.get_json()
+        flavor.name = data['name']
+        flavor.description = data['description']
+        flavor.image_url = data['image_url']
+        db.session.commit()
+        return jsonify(flavor.to_dict()), 200
+    else:
+        return jsonify({"error": "Flavor not found"}), 404
+
+
+@app.route('/flavors', methods=['POST'])
+def create_flavor():
+    data = request.get_json()
+    try:
+        new_flavor = Flavor(name=data['name'], description=data['description'], image_url=data['image_url'])
+        db.session.add(new_flavor)
+        db.session.commit()
+        return jsonify(new_flavor.to_dict()), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/flavors/<int:id>', methods=['DELETE'])
+def delete_flavor(id):
+    flavor = Flavor.query.get(id)
+    if flavor:
+        db.session.delete(flavor)
+        db.session.commit()
+        return jsonify({"message": "Flavor deleted"}), 200
+    else:
+        return jsonify({"error": "Flavor not found"}), 404
+
+@app.before_request
+def check_authorized():
+    endpoints = ['check_session', 'projectbyid', 'projects']
+    if request.endpoint in endpoints and request.method in ['GET', 'POST', 'DELETE'] and not session.get('user_id'):
+        return jsonify({'error': 'Unauthorized: Must login'}), 401
+
+
+@app.route('/favorites', methods=['POST'])
+@login_required
+def add_favorite():
+    data = request.get_json()
+    recipe_id = data.get('recipe_id')
+
+    if not recipe_id:
+        return jsonify({"error": "Recipe ID is required"}), 400
+
+    try:
+        existing_favorite = Favorite.query.filter_by(user_id=current_user.id, recipe_id=recipe_id).first()
+        if existing_favorite:
+            return jsonify({"error": "Recipe already in favorites"}), 400
+
+        favorite = Favorite(user_id=current_user.id, recipe_id=recipe_id)
+        db.session.add(favorite)
+        db.session.commit()
+
+        return jsonify({"message": "Recipe added to favorites", 'favorite': favorite.to_dict()}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

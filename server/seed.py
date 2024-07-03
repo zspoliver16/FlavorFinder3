@@ -1,5 +1,5 @@
 from app import db, app, bcrypt
-from models import User, Flavor  # Import both models
+from models import User, Flavor, Favorite  # Import both models
 
 def seed_users():
     User.query.delete()
@@ -23,8 +23,25 @@ def seed_flavors():
     db.session.add_all(flavors)
     db.session.commit()
 
+def seed_favorites():
+    with app.app_context():
+        Favorite.query.delete()  
+
+        user = User.query.filter_by(username='testuser').first()
+        vanilla = Flavor.query.filter_by(name="Vanilla").first()
+        chocolate = Flavor.query.filter_by(name="Chocolate").first()
+
+        if user and vanilla and chocolate:  
+            favorites = [
+                Favorite(user_id=user.id, recipe_id=vanilla.id),
+                Favorite(user_id=user.id, recipe_id=chocolate.id),
+            ]
+            db.session.add_all(favorites)
+            db.session.commit()
+            print("Database seeded with favorites")
+
 if __name__ == '__main__':
     with app.app_context():
         seed_users()  # Seed users
         seed_flavors()  # Seed flavors
-        print("Database seeded with users and flavors.")
+        seed_favorites()

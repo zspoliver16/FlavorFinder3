@@ -6,10 +6,15 @@ import PrivateRoute from './components/PrivateRoute';
 import HomePage from './components/HomePage';
 import LandingPage from './components/LandingPage';
 import RecipesPage from './components/RecipesPage';
+import NavBar from './components/NavBar';
+import './App.css'
+
+
 
 function App() {
     return (
         <Router>
+            <NavBar />
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/signup" element={<SignupForm />} />

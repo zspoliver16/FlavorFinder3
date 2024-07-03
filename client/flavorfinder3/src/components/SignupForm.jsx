@@ -1,53 +1,41 @@
 import React, { useState } from 'react';
-import authService from './authService';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './SignupForm.css'
 
-function SignupForm() {
-    const [formData, setFromData] = useState({
-        username: '',
-        email: '',
-        password: '',
-    });
+function Signup() {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:5555/signup', { username, email, password });
+      if (response.status === 201) {
+        setMessage(`Signup successful: Welcome ${response.data.username}`);
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000); // Redirect to login after 2 seconds
+      } else {
+        setMessage('Signup failed');
+      }
+    } catch (error) {
+      setMessage(`Signup failed: ${error.response?.data?.msg || error.message}`);
+    }
+  };
 
-    const handleChange = (e) => {
-        setFromData({ ...formData, [e.target.name]: e.target.value});
-        setError(null);
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError(null);
-        try {
-            const response = await authService.signup(formData);
-            console.log(response.data.msg);
-            navigate('/login');
-          } catch (err) {
-            setError(err.response?.data?.msg || 'An error occurred during signup.');
-          }
-    };
-
-    return (
-        <form onSubmit={handleSubmit}>
-          <div className="username">
-            <label htmlFor="username">Username:</label>
-            <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} />
-          </div>
-          <div className="email">
-            <label htmlFor="email">Email:</label>
-            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} />
-          </div>
-          <div className="password">
-            <label htmlFor="password">Password:</label>
-            <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} />
-          </div>
-          {error && <div className="error">{error}</div>}
-          <button type="submit">Sign Up</button>
-        </form>
-      );
+  return (
+    <form className="signup" onSubmit={handleSignup}>
+      <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required />
+      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
+      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
+      <button type="submit">Signup</button>
+      <p>{message}</p>
+    </form>
+  );
 }
 
-export default SignupForm;
+export default Signup;
