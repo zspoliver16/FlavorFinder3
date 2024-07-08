@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import './HomePage.css'
 
 function HomePage() {
     const [flavors, setFlavors] = useState([]);
@@ -81,15 +82,14 @@ function HomePage() {
             return <p className="text-danger">Error: {error}</p>;
         } else {
             return (
-                <Row xs={1} md={3} className="g-4"> 
+                <Row xs={4} md={8} className="g-4"> {/* Adjust md={3} to control number of columns */}
                     {flavors.map((flavor) => (
                         <Col key={flavor.id}>
-                            <Card>
+                            <Card className="h-100">
                                 {flavor.image_url && <Card.Img variant="top" src={flavor.image_url} />}
                                 <Card.Body>
                                     <Card.Title>{flavor.name}</Card.Title>
                                     <Card.Text>{flavor.description}</Card.Text>
-                                    <Button as={Link} to={`/flavors/${flavor.id}`} variant="primary">Explore</Button>
                                     <Button variant="warning" onClick={() => {setFlavorToEdit(flavor); setShowEditModal(true);}}>Edit</Button>
                                     <Button variant="danger" onClick={() => handleDelete(flavor.id)}>Delete</Button>
                                 </Card.Body>
@@ -102,64 +102,65 @@ function HomePage() {
     };
 
     return (
-        <Container className="flavors-page"> 
-            <h1 className="flavors-title">Explore Flavors</h1>
-            <Button variant="primary" onClick={() => setShowCreateModal(true)}>
-                Create New Flavor
-            </Button>
-            {renderFlavors()}
-            
-            {/* Create Flavor Modal */}
-            <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Create New Flavor</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form onSubmit={handleCreateSubmit}>
-                        <Form.Group controlId="formName">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" value={newFlavor.name} onChange={(e) => setNewFlavor({...newFlavor, name: e.target.value})} required />
-                        </Form.Group>
-                        <Form.Group controlId="formDescription">
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control type="text" value={newFlavor.description} onChange={(e) => setNewFlavor({...newFlavor, description: e.target.value})} required />
-                        </Form.Group>
-                        <Form.Group controlId="formImageUrl">
-                            <Form.Label>Image URL</Form.Label>
-                            <Form.Control type="text" value={newFlavor.image_url} onChange={(e) => setNewFlavor({...newFlavor, image_url: e.target.value})} required />
-                        </Form.Group>
-                        <Button variant="primary" type="submit">Create</Button>
-                    </Form>
-                </Modal.Body>
-            </Modal>
-
-            {/* Edit Flavor Modal */}
-            <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Edit Flavor</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {flavorToEdit && (
-                        <Form onSubmit={handleEditSubmit}>
-                            <Form.Group controlId="formEditName">
+        <div className="home-page"> 
+            <Container className="flavors-page">
+                <h1 className="flavors-title">Explore Flavors</h1>
+                <Button variant="primary" onClick={() => setShowCreateModal(true)} className="mb-3">
+                    Create New Flavor
+                </Button>
+                {renderFlavors()}
+                
+                {/* Create Flavor Modal */}
+                <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Create New Flavor</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form onSubmit={handleCreateSubmit}>
+                            <Form.Group controlId="formName">
                                 <Form.Label>Name</Form.Label>
-                                <Form.Control type="text" value={editedFlavor.name} onChange={(e) => setEditedFlavor({...editedFlavor, name: e.target.value})} required />
+                                <Form.Control type="text" value={newFlavor.name} onChange={(e) => setNewFlavor({...newFlavor, name: e.target.value})} required />
                             </Form.Group>
-                            {/* ... Similar fields for description and image_url ... */}
-                            <Form.Group controlId="formEditDescription">
+                            <Form.Group controlId="formDescription">
                                 <Form.Label>Description</Form.Label>
-                                <Form.Control as="textarea" rows={3} value={editedFlavor.description} onChange={(e) => setEditedFlavor({ ...editedFlavor, description: e.target.value })} required />
+                                <Form.Control type="text" value={newFlavor.description} onChange={(e) => setNewFlavor({...newFlavor, description: e.target.value})} required />
                             </Form.Group>
-                            <Form.Group controlId="formEditImageUrl">
+                            <Form.Group controlId="formImageUrl">
                                 <Form.Label>Image URL</Form.Label>
-                                <Form.Control type="text" value={editedFlavor.image_url} onChange={(e) => setEditedFlavor({ ...editedFlavor, image_url: e.target.value })} required />
+                                <Form.Control type="text" value={newFlavor.image_url} onChange={(e) => setNewFlavor({...newFlavor, image_url: e.target.value})} required />
                             </Form.Group>
-                            <Button variant="primary" type="submit">Save Changes</Button>
+                            <Button variant="primary" type="submit">Create</Button>
                         </Form>
-                    )}
-                </Modal.Body>
-            </Modal>
-        </Container>
+                    </Modal.Body>
+                </Modal>
+    
+                {/* Edit Flavor Modal */}
+                <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Edit Flavor</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {flavorToEdit && (
+                            <Form onSubmit={handleEditSubmit}>
+                                <Form.Group controlId="formEditName">
+                                    <Form.Label>Name</Form.Label>
+                                    <Form.Control type="text" value={editedFlavor.name} onChange={(e) => setEditedFlavor({...editedFlavor, name: e.target.value})} required />
+                                </Form.Group>
+                                <Form.Group controlId="formEditDescription">
+                                    <Form.Label>Description</Form.Label>
+                                    <Form.Control as="textarea" rows={3} value={editedFlavor.description} onChange={(e) => setEditedFlavor({ ...editedFlavor, description: e.target.value })} required />
+                                </Form.Group>
+                                <Form.Group controlId="formEditImageUrl">
+                                    <Form.Label>Image URL</Form.Label>
+                                    <Form.Control type="text" value={editedFlavor.image_url} onChange={(e) => setEditedFlavor({ ...editedFlavor, image_url: e.target.value })} required />
+                                </Form.Group>
+                                <Button variant="primary" type="submit">Save Changes</Button>
+                            </Form>
+                        )}
+                    </Modal.Body>
+                </Modal>
+            </Container>
+        </div>
     );
 }
 

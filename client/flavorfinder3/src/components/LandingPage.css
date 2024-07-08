@@ -6,6 +6,10 @@
     height: 300px;
     width: 500px;
     border-radius: 15px;
+    box-shadow: 6px 6px 15px green,
+                -3px -3px 10px green,
+                inset -8px -8px 20px green,
+                inset 5px 5px 10px green;
 }
 
 .landing-cont {
@@ -14,21 +18,44 @@
 
 .landing-title {
     text-shadow: 5px 5px 10px green;
-    font-family: Arial, sans-serif;
+    font-family: 'Ariel';
     font-size: 50px;
-}
-
-p {
-    text-shadow: 5px 5px 10px green;
-    font-size: 30px;
+    text-decoration: underline;
+    border: solid;
+    font-weight: bold;
+    background: transparent;
+    backdrop-filter: blur(10px);
+    color: black;
 }
 
 .land-log {
     border: solid;
     padding: 5px;
+    background-color: black;
+    font-size: 45px;
+    box-shadow: 6px 6px 15px green,
+                -3px -3px 10px green,
+                inset -8px -8px 20px green,
+                inset 5px 5px 10px green;
 }
 
 .land-sign {
     border: solid;
     padding: 5px;
+    background-color: black;
+    font-size: 40px;
+    box-shadow: 6px 6px 15px green,
+                -3px -3px 10px green,
+                inset -8px -8px 20px green,
+                inset 5px 5px 10px green;
+}
+
+.land {
+    text-shadow: 5px 5px 10px green;
+    font-size: 40px;
+    color: black;
+    text-decoration: underline;
+    font-weight: bold;
+    border-style: ridge;
+    backdrop-filter: blur(10px);
 }

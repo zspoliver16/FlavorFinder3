@@ -26,7 +26,7 @@ function NavBar() {
                     <Nav className="me-auto">
                         <Nav.Link as={NavLink} to="/home">Home</Nav.Link>
                         <Nav.Link as={NavLink} to="/recipes">Recipes</Nav.Link>
-                        <Nav.Link as={NavLink} to="/favorites">Favorites</Nav.Link>
+                        <Nav.Link as={NavLink} to="/profile">My Profile</Nav.Link>
                     </Nav>
                     <Button variant="outline-primary" onClick={handleLogout}>Logout</Button>
                 </BootstrapNavbar.Collapse>

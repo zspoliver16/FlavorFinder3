@@ -6,6 +6,7 @@ import PrivateRoute from './components/PrivateRoute';
 import HomePage from './components/HomePage';
 import LandingPage from './components/LandingPage';
 import RecipesPage from './components/RecipesPage';
+import UserProfile from './components/UserProfile';
 import NavBar from './components/NavBar';
 import './App.css'
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="/recipes" element={<RecipesPage />} /> 
             <Route element={<PrivateRoute />}>
                 <Route path="/home" element={<HomePage />} /> 
+                <Route path="/profile" element={<UserProfile />} />
             </Route>
             {/* <Route path="*" element={<Navigate to="/" />} /> */}
           </Routes>

@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, Response
-from ..models import User
-from ..app import db, Favorite
+from ..models import User, Favorite, Recipe
+from ..app import db
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, decode_token
 import requests
 
@@ -8,7 +8,7 @@ auth = Blueprint('auth', __name__)
 recipes = Blueprint('recipes', __name__)
 
 @auth.route('/signup', methods=['POST'])
-@cross_origin(origins=["http://localhost:3000"], supports_credentials=True)
+@jwt_required(origins=["http://localhost:3000"], supports_credentials=True)
 def signup():
     data = request.get_json()
     username = data.get('username')
@@ -74,20 +74,3 @@ def proxy_recipes():
         print(f"Error proxying request to TheMealDB: {e}")
         return jsonify({"error": "Failed to fetch recipes"}), 500
     
-@recipes.route('/favorites', methods=['POST'])
-@cross_origin(origins=["http://localhost:3000"], supports_credentials=True)
-def add_favorite():
-    data = request.get_json()
-    recipe_id = data.get('recipe_id')
-
-    if not recipe_id:
-        return jsonify({"error": "Recipe ID is required"}), 400
-
-    try:
-        favorite = Favorite(recipe_id=recipe_id)
-        db.session.add(favorite)
-        db.session.commit()
-
-        return jsonify({"message": "Recipe added to favorites", 'favorite_id': favorite.id}), 201
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500

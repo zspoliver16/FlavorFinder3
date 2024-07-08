@@ -1,0 +1,17 @@
+.user-main-img {
+    height: 300px;
+    width: 500px;
+    border-radius: 15px;
+    box-shadow: 6px 6px 15px green,
+                -3px -3px 10px green,
+                inset -8px -8px 20px green,
+                inset 5px 5px 10px green;
+}
+
+.profile-title {
+    font-size: 50px;
+    text-decoration: underline;
+    text-transform: uppercase;
+    word-spacing: 2px;
+    text-shadow: 5px 5px 5px rgba(14, 160, 3, 0.5);
+}

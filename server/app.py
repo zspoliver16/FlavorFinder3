@@ -8,6 +8,7 @@ from flask_login import LoginManager, login_required, current_user
 
 
 
+
 CORS(app, origins=["http://localhost:3000"], supports_credentials=True) 
 api = Api(app)
 

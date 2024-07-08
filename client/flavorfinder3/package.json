@@ -41,5 +41,13 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://www.themealdb.com/api/json/v1/1/"
+  "proxy": {
+    "/api": { 
+      "target": "http://localhost:5555",
+      "changeOrigin": true  
+    },
+    "/themealdb": {
+      "target": "https://www.themealdb.com/api/json/v1/1/"
+    }
+  }
 }

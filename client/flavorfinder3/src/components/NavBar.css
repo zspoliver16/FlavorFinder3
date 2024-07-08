@@ -3,11 +3,13 @@
     position: fixed;      /* Fix the navbar to the top */
     top: 0;
     left: 0;
-    width: 100%; 
+    width: 50%; 
     z-index: 1030; /* Ensure navbar stays above other content */
     min-height: 40px;      /* Set a fixed height for a thin navbar */
     display: flex;        /* Use flexbox for easy alignment */
     align-items: center;
+    justify-content: center;
+    margin-left: 350px;
 }
 
 /* Brand/Logo Styling */
