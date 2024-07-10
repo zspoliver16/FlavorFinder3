@@ -1,8 +1,9 @@
 from flask import Blueprint, request, jsonify, Response
-from ..models import User, Favorite
+from ..models import User
 from ..app import db, app
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, decode_token
 import requests
+from config import THE_MEAL_DB_BASE_URL, THE_MEAL_DB_API_KEY
 
 auth = Blueprint('auth', __name__)
 recipes = Blueprint('recipes', __name__)
@@ -58,4 +59,19 @@ def check_token():
         print(f"Error checking token: {e}")
         return jsonify(msg="Error checking token"), 500
 
+@app.route('/api/recipes', methods=['GET'])
+def proxy_recipes():
+    query = request.args.get('query', '')
+    url = f"{THE_MEAL_DB_BASE_URL}{THE_MEAL_DB_API_KEY}/search.php?s={query}"
+
+    try:
+        response = requests.get(url)
+        excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+        headers = [(name, value) for (name, value) in response.raw.headers.items()
+                   if name.lower() not in excluded_headers]
+
+        return Response(response.content, response.status_code, headers)
+    except requests.RequestException as e:
+        print(f"Error proxying request to TheMealDB: {e}")
+        return jsonify({"error": "Failed to fetch recipes"}), 500
     

@@ -63,3 +63,22 @@ class Favorite(db.Model):
     recipe_id = db.Column(db.String, nullable=False)  # Using TheMealDB recipe ID
 
     user = db.relationship('User', backref=db.backref('favorites', lazy=True))
+
+
+class Recipe(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    ingredients = db.Column(db.Text, nullable=False)
+    instructions = db.Column(db.Text, nullable=False)
+    category = db.Column(db.String)
+    image_url = db.Column(db.String)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "image_url": self.image_url,
+            "name": self.name,
+            "ingredients": self.ingredients,
+            "instructions": self.instructions,
+            "category": self.category
+        }

@@ -1,12 +1,9 @@
-from flask import request, make_response, session, jsonify
-from config import app, db, bcrypt, THE_MEAL_DB_API_KEY, THE_MEAL_DB_BASE_URL
-from models import User, Flavor, Favorite
+from flask import Flask, request, make_response, session, jsonify
+from config import app, db, bcrypt
+from models import User, Flavor, Favorite, Recipe
 from flask_restful import Resource, Api
 from flask_cors import CORS, cross_origin
 from flask_login import LoginManager, login_required, current_user
-
-
-
 
 
 CORS(app, origins=["http://localhost:3000"], supports_credentials=True) 
@@ -150,6 +147,63 @@ def check_authorized():
     endpoints = ['check_session', 'projectbyid', 'projects']
     if request.endpoint in endpoints and request.method in ['GET', 'POST', 'DELETE'] and not session.get('user_id'):
         return jsonify({'error': 'Unauthorized: Must login'}), 401
+    
+
+
+@app.route('/recipes', methods=['GET'])
+def get_recipes():
+    recipes = Recipe.query.all()
+    return jsonify([recipe.to_dict() for recipe in recipes])
+
+@app.route('/recipes/<int:id>', methods=['GET'])
+def get_recipe(id):
+    recipe = Recipe.query.get(id)
+    if recipe:
+        return jsonify(recipe.to_dict()), 200
+    else:
+        return jsonify({"error": "Recipe not found"}), 404
+
+@app.route('/recipes', methods=['POST'])
+def create_recipe():
+    data = request.get_json()
+    try:
+        new_recipe = Recipe(
+            name=data['name'], 
+            ingredients=data['ingredients'],
+            instructions=data['instructions'],
+            image_url=data['image_url'],
+            category=data.get('category', '')  # Make category optional
+        )
+        db.session.add(new_recipe)
+        db.session.commit()
+        return jsonify(new_recipe.to_dict()), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/recipes/<int:id>', methods=['PUT'])
+def update_recipe(id):
+    recipe = Recipe.query.get(id)
+    if recipe:
+        data = request.get_json()
+        recipe.name = data['name']
+        recipe.ingredients = data['ingredients']
+        recipe.instructions = data['instructions']
+        recipe.image_url = data['image_url']
+        recipe.category = data.get('category', '')  # Make category optional
+        db.session.commit()
+        return jsonify(recipe.to_dict()), 200
+    else:
+        return jsonify({"error": "Recipe not found"}), 404
+
+@app.route('/recipes/<int:id>', methods=['DELETE'])
+def delete_recipe(id):
+    recipe = Recipe.query.get(id)
+    if recipe:
+        db.session.delete(recipe)
+        db.session.commit()
+        return jsonify({"message": "Recipe deleted"}), 200
+    else:
+        return jsonify({"error": "Recipe not found"}), 404
 
 
 @app.route('/favorites', methods=['POST'])
@@ -173,3 +227,7 @@ def add_favorite():
         return jsonify({"message": "Recipe added to favorites", 'favorite': favorite.to_dict()}), 201
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+
+if __name__ == '__main__':
+    app.run(port=5555, debug=True)
