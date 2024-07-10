@@ -5,11 +5,15 @@
 .card-title.h5 {
   backdrop-filter: blur(20px);
   color: green;
+  text-transform: uppercase;
+  text-decoration: underline;
+
+
 }
 
 .card-text {
   backdrop-filter: blur(20px);
-  color: darkgreen;
+  background-color: black;
 }
 
 .flavors-title {  

@@ -90,7 +90,7 @@ function HomePage() {
                                 {flavor.image_url && <Card.Img variant="top" src={flavor.image_url} />}
                                 <Card.Body>
                                     <Card.Title>{flavor.name}</Card.Title>
-                                    <Card.Text>{flavor.description}</Card.Text>
+                                    <Card.Text>-{flavor.description}</Card.Text>
                                     <Button variant="warning" onClick={() => {setFlavorToEdit(flavor); setShowEditModal(true);}}>Edit</Button>
                                     <Button variant="danger" onClick={() => handleDelete(flavor.id)}>Delete</Button>
                                 </Card.Body>

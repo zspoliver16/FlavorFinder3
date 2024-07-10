@@ -8,6 +8,7 @@ import LandingPage from './components/LandingPage';
 import RecipesPage from './components/RecipesPage';
 import UserProfile from './components/UserProfile';
 import RecipeForm from './components/RecipeForm';
+import Favorites from './components/Favorites';
 import NavBar from './components/NavBar';
 import './App.css'
 
@@ -28,6 +29,7 @@ function App() {
                 <Route path="/home" element={<HomePage />} /> 
                 <Route path="/profile" element={<UserProfile />} />
                 <Route path="/new-recipe" element={<RecipeForm />} />
+                <Route patch="/favorites" element={<Favorites />} />
             </Route>
             {/* <Route path="*" element={<Navigate to="/" />} /> */}
           </Routes>

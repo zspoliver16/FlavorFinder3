@@ -432,10 +432,19 @@ const RecipesPage = () => {
     });
   };
 
+  const handleCardClick = (recipeId) => {
+    if (expandedRecipeId === recipeId) {
+      // If already expanded, collapse it
+      setExpandedRecipeId(null);
+    } else {
+      // Expand the clicked recipe
+      setExpandedRecipeId(recipeId);
+    }
+  };
+
   return (
     <Container className="recipes-page">
-      {/* ... (your title and search form) ... */}
-      <h1 className="recipes-title">Explor New Flavors!</h1>
+      <h1 className="recipes-title">Explore New Flavors!</h1>
       <Form.Group controlId="recipe-searchForm">
         <Form.Control
           type="text"
@@ -445,31 +454,25 @@ const RecipesPage = () => {
         />
       </Form.Group>
 
-      <Row>
+      <Row className="recipes-grid">
         {filteredRecipes.map((recipe) => (
           <Col key={recipe.id} sm={12} md={6} lg={4} className="mb-4">
             <Card
               className="recipe-card"
-              onClick={() => setExpandedRecipeId(recipe.id)} // Expand on image click
+              onClick={() => handleCardClick(recipe.id)}
+              style={{ height: expandedRecipeId === recipe.id ? 'auto' : '300px' }}
             >
               <Card.Img variant="top" src={recipe.image_url} />
-              <Card.Body
-                style={{
-                  height: expandedRecipeId === recipe.id ? "auto" : "150px",
-                }}
-              >
-                {/* ... your card title ... */}
+              <Card.Body>
                 <Card.Title>{recipe.name}</Card.Title>
                 <Button
-                  variant={
-                    favorites.includes(recipe.id) ? "danger" : "outline-danger"
-                  }
+                  style={{backgroundColor: favorites.includes(recipe.id) ? 'green' : ''}}
                   onClick={(e) => {
                     e.stopPropagation();
                     toggleFavorite(recipe.id);
                   }}
                 >
-                  {favorites.includes(recipe.id) ? "Unfavorite" : "Favorite"}
+                  {favorites.includes(recipe.id) ? "Favorited!!" : "Favorite"}
                 </Button>
 
                 {/* Conditional Rendering of Recipe Details */}
