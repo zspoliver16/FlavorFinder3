@@ -17,6 +17,7 @@ function HomePage() {
     // Form data state
     const [newFlavor, setNewFlavor] = useState({ name: '', description: '', image_url: '' });
     const [editedFlavor, setEditedFlavor] = useState({ name: '', description: '', image_url: '' });
+    
 
     useEffect(() => {
         fetchFlavors();
@@ -142,7 +143,7 @@ function HomePage() {
                     <Modal.Body>
                         {flavorToEdit && (
                             <Form onSubmit={handleEditSubmit}>
-                                <Form.Group controlId="formEditName">
+                                <Form.Group className="flavor-card" controlId="formEditName">
                                     <Form.Label>Name</Form.Label>
                                     <Form.Control type="text" value={editedFlavor.name} onChange={(e) => setEditedFlavor({...editedFlavor, name: e.target.value})} required />
                                 </Form.Group>

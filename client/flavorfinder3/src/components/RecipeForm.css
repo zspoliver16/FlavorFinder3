@@ -1,0 +1,10 @@
+.recipe-form {
+    background: black;
+    border-radius: 10px;
+    width: 500px;
+    height: 500
+}
+
+.modal-title.h4 {
+    text-align: center;
+}

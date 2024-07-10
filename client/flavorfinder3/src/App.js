@@ -7,6 +7,7 @@ import HomePage from './components/HomePage';
 import LandingPage from './components/LandingPage';
 import RecipesPage from './components/RecipesPage';
 import UserProfile from './components/UserProfile';
+import RecipeForm from './components/RecipeForm';
 import NavBar from './components/NavBar';
 import './App.css'
 
@@ -26,6 +27,7 @@ function App() {
             <Route element={<PrivateRoute />}>
                 <Route path="/home" element={<HomePage />} /> 
                 <Route path="/profile" element={<UserProfile />} />
+                <Route path="/new-recipe" element={<RecipeForm />} />
             </Route>
             {/* <Route path="*" element={<Navigate to="/" />} /> */}
           </Routes>

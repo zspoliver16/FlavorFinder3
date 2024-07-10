@@ -7,7 +7,6 @@
     background: green;
     border-radius: 15px;
     text-decoration: underline;
-    text-decoration-style: wavy;
     box-shadow: 6px 6px 15px green,
                 -3px -3px 10px green,
                 inset -8px -8px 20px green,
@@ -74,10 +73,9 @@ div.card-tile.h5 {
     flex: 1 0 250px; /* Minimum width for each card */
     color: green;
     font-weight: bold;
-    background-color: transparent;
+    background-color: black;
     backdrop-filter: blur(2px);
     text-decoration: underline;
-    text-decoration-style: wavy;
     box-shadow: 6px 6px 15px green,
                 -3px -3px 10px green,
                 inset -8px -8px 20px green,
@@ -92,7 +90,13 @@ div.card-tile.h5 {
 }
 
 .recipes-page {
-    padding-top: 5500px;
+    padding-top: 3500px;
     padding-left: 50px;
 }
 
+#recipe-searchForm {
+    width: 100%;   /* Make it take full width of its container */
+    height: 48px;  /* Adjust height as desired */
+    padding: 12px; /* Increase padding for larger input area */
+    font-size: 30px;
+}
